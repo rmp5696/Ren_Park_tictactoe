@@ -4,7 +4,6 @@ import random
 Square = int
 Score = int
 
-
 class Engine:
 
     def __init__(self, ai: str, foe: str, level: int):
@@ -12,8 +11,7 @@ class Engine:
         self.foe = foe
         self.level = level
 
-    def minimax(self, board: Board, ai_turn: bool, depth: int, alpha: float,
-                beta: float) -> tuple:
+    def minimax(self, board: Board, ai_turn: bool, depth: int, alpha: float, beta: float) -> tuple:
         available_moves = board.empty_squares
         if len(available_moves) == board.size**2:
             return 0, random.choice(list(range(board.size**2)))
@@ -51,12 +49,12 @@ class Engine:
 
     def evaluate_board(self, board: Board, depth: int) -> Score:
         if board.winner() == self.ai:
-            return board.size**2 - depth
+            return -1 * (board.size**2 - depth)  # Reverse the score
         elif board.winner() == self.foe:
-            return -1 * board.size**2 - depth
+            return 1 * board.size**2 - depth
+            # return 0  # Don't reward the opponent's victory
         return 0
 
     def evaluate_best_move(self, board: Board) -> Square:
-        best_move = self.minimax(board, True, 0, float('-inf'),
-                                 float('inf'))[1]
+        best_move = self.minimax(board, True, 0, float('-inf'), float('inf'))[1]
         return best_move
